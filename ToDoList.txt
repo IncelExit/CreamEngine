@@ -1,0 +1,7 @@
+- use JAR to build docker instead of this horrible, horrible maven thing I'm currently doing
+- integrate DB
+- add way to add/remove words while running (+ maybe list of all guesses that it didn't know)
+- properly kill game with finish
+- automatic pinning
+- fix scores (+ mentions)
+- case insensitive

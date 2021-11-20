@@ -1,0 +1,13 @@
+services:
+  db:
+    image: mariadb:latest
+    volumes:
+      - ./data/db:/var/lib/mysql
+    environment:
+      # you should probably change this before running
+      - MARIADB_ROOT_PASSWORD=root
+  bot:
+    image: creamengine
+    environment:
+      # you should probably change this before running
+      - MARIADB_ROOT_PASSWORD=root
