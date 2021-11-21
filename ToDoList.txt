@@ -6,3 +6,4 @@
 - automatic pinning
 - fix scores (+ mentions)
 - case insensitive
+- add "seed" mechanism where the letters can be chosen at the start
