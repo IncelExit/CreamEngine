@@ -1,4 +1,4 @@
-package org.incelexit.games.words.common;
+package org.incelexit.creamengine.games.words.common;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -12,8 +12,8 @@ public class FileHandler {
     private static final float WORD_COUNT_MAXIMUM_FACTOR = 1.2f;
     private static final int AVERAGE_NUMBER_OF_CHARACTERS_PER_WORD = 5;
 
-    public static final String ALL_WORDS_FILE_NAME = "all_words.txt";
-    public static final String SEVEN_LETTER_WORDS_FILE_NAME = "seven_letter_words.txt";
+    public static final String ALL_WORDS_FILE_NAME = "data/all_words.txt";
+    public static final String SEVEN_LETTER_WORDS_FILE_NAME = "data/seven_letter_words.txt";
 
 
     public List<String> loadWordsIntoList(File file) throws IOException {

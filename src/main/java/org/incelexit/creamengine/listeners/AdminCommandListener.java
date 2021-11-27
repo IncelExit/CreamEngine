@@ -1,7 +1,7 @@
-package org.incelexit.listeners;
+package org.incelexit.creamengine.listeners;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.incelexit.permissions.PermissionManager;
+import org.incelexit.creamengine.permissions.PermissionManager;
 
 import java.util.Set;
 

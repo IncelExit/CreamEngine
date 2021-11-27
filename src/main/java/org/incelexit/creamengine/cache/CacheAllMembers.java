@@ -1,4 +1,4 @@
-package org.incelexit.cache;
+package org.incelexit.creamengine.cache;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;

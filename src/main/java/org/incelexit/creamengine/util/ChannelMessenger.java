@@ -1,4 +1,4 @@
-package org.incelexit.util;
+package org.incelexit.creamengine.util;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 

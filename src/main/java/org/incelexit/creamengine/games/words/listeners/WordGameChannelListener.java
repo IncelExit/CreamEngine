@@ -1,7 +1,7 @@
-package org.incelexit.games.words.listeners;
+package org.incelexit.creamengine.games.words.listeners;
 
-import org.incelexit.games.words.game.Game;
-import org.incelexit.listeners.GuildMessageReceivedListener;
+import org.incelexit.creamengine.games.words.game.Game;
+import org.incelexit.creamengine.listeners.GuildMessageReceivedListener;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 

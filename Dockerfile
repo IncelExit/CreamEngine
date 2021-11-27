@@ -11,5 +11,5 @@ RUN ./mvnw dependency:go-offline
 
 COPY src ./src
 
-CMD ["./mvnw", "clean", "install", "exec:java", "-Dexec.mainClass=org.incelexit.Main"]
+CMD ["./mvnw", "clean", "install", "exec:java", "-Dexec.mainClass=org.incelexit.creamengine.Main"]
 

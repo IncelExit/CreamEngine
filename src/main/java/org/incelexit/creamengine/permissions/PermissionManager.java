@@ -1,4 +1,4 @@
-package org.incelexit.permissions;
+package org.incelexit.creamengine.permissions;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;

@@ -1,11 +1,11 @@
-package org.incelexit.games.words.game;
+package org.incelexit.creamengine.games.words.game;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import org.incelexit.bot.CEBot;
-import org.incelexit.games.words.common.FileHandler;
-import org.incelexit.games.words.listeners.WordGameChannelListener;
-import org.incelexit.util.ChannelMessenger;
+import org.incelexit.creamengine.bot.CEBot;
+import org.incelexit.creamengine.games.words.common.FileHandler;
+import org.incelexit.creamengine.games.words.listeners.WordGameChannelListener;
+import org.incelexit.creamengine.util.ChannelMessenger;
 
 import java.io.IOException;
 import java.util.*;

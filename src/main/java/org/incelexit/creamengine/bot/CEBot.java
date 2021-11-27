@@ -1,6 +1,6 @@
-package org.incelexit.bot;
+package org.incelexit.creamengine.bot;
 
-import org.incelexit.cache.CacheAllMembers;
+import org.incelexit.creamengine.cache.CacheAllMembers;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;

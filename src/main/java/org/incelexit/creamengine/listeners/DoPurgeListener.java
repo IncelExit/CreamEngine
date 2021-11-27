@@ -1,10 +1,10 @@
-package org.incelexit.listeners;
+package org.incelexit.creamengine.listeners;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.utils.concurrent.Task;
 import org.jetbrains.annotations.NotNull;
-import org.incelexit.util.ChannelMessenger;
+import org.incelexit.creamengine.util.ChannelMessenger;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

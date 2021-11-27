@@ -1,4 +1,4 @@
-package org.incelexit.listeners;
+package org.incelexit.creamengine.listeners;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;

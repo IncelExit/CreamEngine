@@ -1,9 +1,9 @@
-package org.incelexit.listeners;
+package org.incelexit.creamengine.listeners;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.incelexit.bot.CEBot;
-import org.incelexit.games.words.game.Game;
+import org.incelexit.creamengine.bot.CEBot;
+import org.incelexit.creamengine.games.words.game.Game;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

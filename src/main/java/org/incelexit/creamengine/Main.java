@@ -1,7 +1,7 @@
-package org.incelexit;
+package org.incelexit.creamengine;
 
-import org.incelexit.bot.CEBot;
-import org.incelexit.listeners.*;
+import org.incelexit.creamengine.bot.CEBot;
+import org.incelexit.creamengine.listeners.*;
 
 public class Main {
     public static void main(String[] args) {
