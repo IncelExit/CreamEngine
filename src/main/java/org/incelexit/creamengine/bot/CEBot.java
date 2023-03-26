@@ -14,7 +14,9 @@ public class CEBot {
 
     JDA jda;
 
-    public CEBot() {
+    private static final CEBot bot = new CEBot();
+
+    private CEBot() {
         try {
             EnumSet<GatewayIntent> intents = EnumSet.of(
                     // We need messages in guilds to accept commands from users
@@ -25,7 +27,7 @@ public class CEBot {
             );
 
             JDABuilder jdaBuilder = JDABuilder.createLight(
-                    "", intents);
+                    "<insert_api_key_here>", intents);
             jdaBuilder.setActivity(Activity.playing("Juicing cows"));
             jdaBuilder.setMemberCachePolicy(new CacheAllMembers());
             this.jda = jdaBuilder.build();
@@ -40,6 +42,10 @@ public class CEBot {
     }
 
     public void removeListener(EventListener... listeners) {
-        this.jda.removeEventListener((Object) listeners);
+        this.jda.removeEventListener((Object[]) listeners);
+    }
+
+    public static CEBot getBot() {
+        return bot;
     }
 }

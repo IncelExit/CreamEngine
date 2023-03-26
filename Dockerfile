@@ -4,12 +4,7 @@ FROM openjdk:latest
 
 WORKDIR CreamEngine
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+COPY target/CreamEngine-1.1-SNAPSHOT-jar-with-dependencies.jar CreamEngine.jar
 
-RUN ./mvnw dependency:go-offline
-
-COPY src ./src
-
-CMD ["./mvnw", "clean", "install", "exec:java", "-Dexec.mainClass=org.incelexit.creamengine.Main"]
+ENTRYPOINT java -jar CreamEngine.jar
 

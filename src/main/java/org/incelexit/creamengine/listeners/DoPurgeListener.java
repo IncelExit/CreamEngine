@@ -1,10 +1,10 @@
 package org.incelexit.creamengine.listeners;
 
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.utils.concurrent.Task;
-import org.jetbrains.annotations.NotNull;
 import org.incelexit.creamengine.util.ChannelMessenger;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -19,24 +19,24 @@ public class DoPurgeListener extends PurgeListener {
     private static final String DO_PURGE = "doPurge";
 
     @Override
-    public void handleAdminCommand(GuildMessageReceivedEvent gmrEvent) {
+    public void handleAdminCommand(MessageReceivedEvent gmrEvent) {
         String message = gmrEvent.getMessage().getContentDisplay().substring(1);
 
         Guild guild = gmrEvent.getGuild();
-        TextChannel currentChannel = gmrEvent.getChannel();
+        MessageChannel currentChannel = gmrEvent.getChannel();
 
         if (message.equals(DO_PURGE)) {
             doPurge(guild, currentChannel);
         }
     }
 
-    public void doPurge(Guild guild, TextChannel currentChannel) {
+    public void doPurge(Guild guild, MessageChannel currentChannel) {
         //asynchronous loading of members is necessary
         Task<List<Member>> memberLoadingTask = guild.loadMembers();
         memberLoadingTask.onSuccess(members -> doPurge(members, guild, currentChannel));
     }
 
-    private void doPurge(List<Member> members, Guild guild, TextChannel currentChannel) {
+    private void doPurge(List<Member> members, Guild guild, MessageChannel currentChannel) {
         Set<User> inactiveUsers = members.stream().map(Member::getUser).collect(Collectors.toSet());
 
         inactiveUsers.removeAll(getRecentlySeenUsers(guild));
@@ -46,7 +46,7 @@ public class DoPurgeListener extends PurgeListener {
         reassignRolesToMembers(guild, currentChannel, inactiveUsers);
     }
 
-    private void reassignRolesToMembers(Guild guild, TextChannel currentChannel, Set<User> inactiveUsers) {
+    private void reassignRolesToMembers(Guild guild, MessageChannel currentChannel, Set<User> inactiveUsers) {
 
         Set<Role> rolesToRemove = new HashSet<>();
         Set<Role> rolesToAdd = new HashSet<>();
@@ -90,7 +90,7 @@ public class DoPurgeListener extends PurgeListener {
         }
     }
 
-    private void listReassignedUsers(TextChannel currentChannel, Set<User> inactiveUsers) {
+    private void listReassignedUsers(MessageChannel currentChannel, Set<User> inactiveUsers) {
         ChannelMessenger channelMessenger = new ChannelMessenger(currentChannel);
         List<String> messages = new ArrayList<>();
         messages.add("Following users have not posted for " + MAXIMUM_DAYS_SINCE_LAST_MESSAGE + " days and were assigned the \"Friendly lurker\" role:");
@@ -103,7 +103,7 @@ public class DoPurgeListener extends PurgeListener {
     @NotNull
     private Set<User> getRecentlySeenUsers(Guild guild) {
         Set<User> usersSeenRecently = new HashSet<>();
-        for (TextChannel channel : guild.getTextChannels()) {
+        for (MessageChannel channel : guild.getTextChannels()) {
             usersSeenRecently.addAll(getUsersSeenInChannel(channel, Duration.of(MAXIMUM_DAYS_SINCE_LAST_MESSAGE, ChronoUnit.DAYS)));
         }
         return usersSeenRecently;

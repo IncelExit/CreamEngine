@@ -1,31 +1,34 @@
 package org.incelexit.creamengine.games.words.listeners;
 
-import org.incelexit.creamengine.games.words.game.Game;
+import org.incelexit.creamengine.games.words.Wordgame;
 import org.incelexit.creamengine.listeners.GuildMessageReceivedListener;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class WordGameChannelListener extends GuildMessageReceivedListener {
 
-    private final Game game;
-    private final TextChannel channel;
+    private final Wordgame game;
+    private final MessageChannel channel;
 
 
-    public WordGameChannelListener(Game game, TextChannel channel) {
+    public WordGameChannelListener(Wordgame game, MessageChannel channel) {
         this.game = game;
         this.channel = channel;
     }
 
     @Override
-    protected void handleGuildMessage(GuildMessageReceivedEvent gmrEvent) {
-        if(this.channel.getName().equals(gmrEvent.getChannel().getName())) {
+    protected void handleGuildMessage(MessageReceivedEvent gmrEvent) {
+        if (this.channel.getId().equals(gmrEvent.getChannel().getId())) {
             String message = gmrEvent.getMessage().getContentDisplay();
             switch (message) {
-                case "/finish" -> game.finish();
                 case "/words" -> game.showAlreadyUsedWords();
                 case "/rules" -> game.printGameRules();
                 case "/letters" -> game.printLetters();
-                default -> game.processNextWord(gmrEvent.getAuthor(), message);
+                case "/score" -> game.printPoints();
+                case "/finish" -> game.finish();
+                default -> {
+                    if (message.matches("[a-zA-Z]*")) game.processNextWord(gmrEvent.getAuthor(), message);
+                }
             }
         }
     }

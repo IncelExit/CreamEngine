@@ -16,7 +16,7 @@ public abstract class PurgeListener extends AdminCommandListener {
 
     protected static final long MAXIMUM_DAYS_SINCE_LAST_MESSAGE = 42;
 
-    protected Set<User> getUsersSeenInChannel(TextChannel channel, Duration maxTimeSinceLastMessage) {
+    protected Set<User> getUsersSeenInChannel(MessageChannel channel, Duration maxTimeSinceLastMessage) {
         MessageHistory history = channel.getHistory();
         OffsetDateTime earliestSearchDate = OffsetDateTime.now().minus(maxTimeSinceLastMessage);
         OffsetDateTime earliestMessageTime = OffsetDateTime.now();

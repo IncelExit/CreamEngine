@@ -1,17 +1,21 @@
-package org.incelexit.creamengine.games.words.game;
+package org.incelexit.creamengine.games.words;
 
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.incelexit.creamengine.bot.CEBot;
+import org.incelexit.creamengine.games.words.callbacks.LetterMessageSetterCallback;
+import org.incelexit.creamengine.games.words.callbacks.WordMessageSetterCallback;
 import org.incelexit.creamengine.games.words.common.FileHandler;
 import org.incelexit.creamengine.games.words.listeners.WordGameChannelListener;
+import org.incelexit.creamengine.util.CEApp;
 import org.incelexit.creamengine.util.ChannelMessenger;
+import org.incelexit.creamengine.util.MessagePinCallback;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class Game {
+public class Wordgame implements CEApp {
 
     private Set<String> allWords;
     private Set<String> sevenLetterWords;
@@ -19,7 +23,6 @@ public class Game {
 
     private final ChannelMessenger channelMessenger;
     private WordGameChannelListener channelListener;
-    private final CEBot bot;
 
     private String sevenLetterWord;
     private Pattern characterRegex;
@@ -30,16 +33,16 @@ public class Game {
 
     private Map<User, Integer> points;
 
-    public Game(TextChannel channel, CEBot bot) {
+    private String letterMessageId;
+    private String wordMessageId;
+
+    public Wordgame(MessageChannel channel) {
         this.points = new HashMap<>();
-        FileHandler fileHandler = new FileHandler();
         this.channelMessenger = new ChannelMessenger(channel);
 
-        this.bot = bot;
-
         try {
-            allWords = fileHandler.loadWordsIntoSet(
-                    fileHandler.getFile(FileHandler.ALL_WORDS_FILE_NAME));
+            allWords = FileHandler.loadWordsIntoSet(
+                    FileHandler.getFile(FileHandler.ALL_WORDS_FILE_NAME));
         } catch (IOException e) {
             channelMessenger.sendMessage("A required word list (" + FileHandler.ALL_WORDS_FILE_NAME + ") was not found. " +
                                          "Please ensure these files are in the same folder as the game!");
@@ -47,8 +50,8 @@ public class Game {
         }
 
         try {
-            sevenLetterWords = fileHandler.loadWordsIntoSet(
-                    fileHandler.getFile(FileHandler.SEVEN_LETTER_WORDS_FILE_NAME));
+            sevenLetterWords = FileHandler.loadWordsIntoSet(
+                    FileHandler.getFile(FileHandler.SEVEN_LETTER_WORDS_FILE_NAME));
         } catch (IOException e) {
             channelMessenger.sendMessage("A required word list (" + FileHandler.SEVEN_LETTER_WORDS_FILE_NAME + ") was not found. " +
                                          "Please ensure these files are in the same folder as the game!");
@@ -78,14 +81,17 @@ public class Game {
         printGameRules();
 
         setupChannelListener();
+
+        channelMessenger.unpinAllMessages();
     }
 
     private void setupChannelListener() {
         this.channelListener = new WordGameChannelListener(this, channelMessenger.getChannel());
-        this.bot.registerListener(this.channelListener);
+        CEBot.getBot().registerListener(this.channelListener);
     }
 
     public void processNextWord(User user, String nextWord) {
+        nextWord = nextWord.toLowerCase(Locale.ROOT);
         if (nextWord.length() == 0) {
             channelMessenger.sendMessage("Please enter a word.\n");
         } else if (nextWord.length() < 4) {
@@ -117,6 +123,7 @@ public class Game {
             channelMessenger.sendMessage("Nice! The word " + nextWord + " counts! You get " + pointValue + " Points!\n" +
                                          "Only " + (matchingWordCount - foundWords) + " to go!\n");
 
+
         }
 
         if (foundWords >= matchingWordCount) {
@@ -130,28 +137,34 @@ public class Game {
 
     public void showAlreadyUsedWords() {
         channelMessenger.sendMessage("Words you found so far: ");
-        printWords(alreadyUsedWords);
+        String formattedWords = formatWords(alreadyUsedWords);
+
+        channelMessenger.unpinMessage(wordMessageId);
+        channelMessenger.sendMessage(formattedWords, new WordMessageSetterCallback(this), new MessagePinCallback());
     }
 
     public void printGameRules() {
-        String gameRules = "Welcome to the game!\n" +
-                           "Words give points according to the fibonacci sequence, a word that contains all letters exactly once gives double points.\n" +
-                           "The letters this time are " + getLettersFormattedString(shuffledCharacters) + "\n" +
-                           "The letter " + requiredCharacter + " must be in every word.\n" +
-                           "You have found " + alreadyUsedWords.size() + " out of " + matchingWordCount + " so far.\n" +
-                           "Good luck finding all of them!\n" +
-                           "If you want to see the rules again, enter /rules.\n" +
-                           "If you just want to see the allowed letters, enter /letters.\n" +
-                           "If you want to show all words you already found, enter /words.\n";
+        channelMessenger.sendMessage("""
+                Welcome to the game!
+                Words give points according to the fibonacci sequence, a word that contains all letters exactly once gives double points.
+                If you want to see the rules again, enter /rules.
+                If you just want to see the allowed letters, enter /letters.
+                If you want to show all words you already found, enter /words.
+                And if you want to know how many points everyone has, enter /score.
+                """);
 
-        channelMessenger.sendMessage(gameRules);
+        printLetters();
+
+        channelMessenger.sendMessage("Good luck finding all of them!");
     }
 
     public void printLetters() {
         String letters = "The letters this time are " + getLettersFormattedString(shuffledCharacters) + "\n" +
-                         "The letter " + requiredCharacter + " must be in every word.\n";
+                         "The letter " + requiredCharacter + " must be in every word.\n" +
+                         "There are " + matchingWordCount + " words in total.\n";
 
-        channelMessenger.sendMessage(letters);
+        channelMessenger.unpinMessage(letterMessageId);
+        channelMessenger.sendMessage(letters, new LetterMessageSetterCallback(this), new MessagePinCallback());
     }
 
     private String getLettersFormattedString(List<Character> characters) {
@@ -256,34 +269,44 @@ public class Game {
         this.points.merge(user, newPoints, Integer::sum);
     }
 
-    private void printWords(Collection<String> words) {
+    private String formatWords(Collection<String> words) {
         List<String> wordList = new ArrayList<>(words);
         wordList.sort(String::compareTo);
-        String wordListMessage = String.join(", ", wordList);
-        this.channelMessenger.sendMessage(wordListMessage);
+        return String.join(", ", wordList);
     }
 
     private void printMissingWords() {
         channelMessenger.sendMessage("You missed these words:");
         Set<String> missingWords = new HashSet<>(this.allWords);
         missingWords.removeAll(alreadyUsedWords);
-        printWords(missingWords);
+        String formattedWords = formatWords(missingWords);
+        this.channelMessenger.sendMessage(formattedWords);
     }
 
-    private void printPoints() {
+    public void printPoints() {
         StringBuilder pointStringBuilder = new StringBuilder();
         for (Map.Entry<User, Integer> pointEntry : this.points.entrySet()) {
-            pointStringBuilder.append(pointEntry.getKey().getName())
+            pointStringBuilder.append(pointEntry.getKey().getAsMention())
                     .append(": ")
                     .append(pointEntry.getValue())
-                    .append(" points");
+                    .append(" points")
+                    .append(System.lineSeparator());
         }
         this.channelMessenger.sendMessage(pointStringBuilder.toString());
     }
 
     public void finish() {
+        channelMessenger.unpinAllMessages();
         printMissingWords();
         printPoints();
-        this.bot.removeListener(this.channelListener);
+        CEBot.getBot().removeListener(this.channelListener);
+    }
+
+    public void setLetterMessageId(String letterMessageId) {
+        this.letterMessageId = letterMessageId;
+    }
+
+    public void setWordMessageId(String wordMessageId) {
+        this.wordMessageId = wordMessageId;
     }
 }

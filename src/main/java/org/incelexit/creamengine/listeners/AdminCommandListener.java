@@ -1,6 +1,6 @@
 package org.incelexit.creamengine.listeners;
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.incelexit.creamengine.permissions.PermissionManager;
 
 import java.util.Set;
@@ -11,11 +11,11 @@ public abstract class AdminCommandListener extends SlashCommandListener {
 
 
     @Override
-    protected void handleSlashCommand(GuildMessageReceivedEvent gmrEvent) {
+    protected void handleSlashCommand(MessageReceivedEvent gmrEvent) {
         if(permissionManager.checkPermissions(gmrEvent.getMember())) {
             handleAdminCommand(gmrEvent);
         }
     }
 
-    protected  abstract void handleAdminCommand(GuildMessageReceivedEvent gmrEvent);
+    protected  abstract void handleAdminCommand(MessageReceivedEvent gmrEvent);
 }
