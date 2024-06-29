@@ -1,7 +1,7 @@
 package org.incelexit.creamengine;
 
 import org.incelexit.creamengine.bot.CEBot;
-import org.incelexit.creamengine.listeners.DeleteUserMessagesListener;
+import org.incelexit.creamengine.games.words.listeners.WordGameListener;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,8 +13,8 @@ public class Main {
         bot.registerListener(new ListPurgeListener());
         bot.registerListener(new MemberCountListener());
         bot.registerListener(new CommandLoggerListener());
-        bot.registerListener(new WordGameListener());*/
-        bot.registerListener(new DeleteUserMessagesListener());
+        bot.registerListener(new DeleteUserMessagesListener());*/
+        bot.registerListener(new WordGameListener());
 
     }
 }
