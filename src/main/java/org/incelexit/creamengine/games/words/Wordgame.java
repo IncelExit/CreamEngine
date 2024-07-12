@@ -159,23 +159,19 @@ public class Wordgame implements CEApp {
     }
 
     public void printLetters() {
-        String letters = "The letters this time are " + getLettersFormattedString(shuffledCharacters) + "\n" +
-                         "The letter " + requiredCharacter + " must be in every word.\n" +
-                         "There are " + matchingWordCount + " words in total.\n";
-
+        String letters = "The letters this time are " + getLettersFormattedString(shuffledCharacters) + "\n";
         channelMessenger.unpinMessage(letterMessageId);
         channelMessenger.sendMessage(letters, new LetterMessageSetterCallback(this), new MessagePinCallback());
     }
 
     private String getLettersFormattedString(List<Character> characters) {
         StringBuilder formattedLetters = new StringBuilder();
-        int characterCount = characters.size();
-        for (int i = 0; i < characterCount - 2; i++) {
-            formattedLetters.append(characters.get(i)).append(", ");
+        formattedLetters.append("**").append(requiredCharacter).append("** ");
+        for (char c : characters) {
+            if (c != requiredCharacter) {
+                formattedLetters.append(", ").append(c);
+            }
         }
-        formattedLetters.append(characters.get(characterCount - 2))
-                .append(" and ")
-                .append(characters.get(characterCount - 1));
         return formattedLetters.toString();
     }
 

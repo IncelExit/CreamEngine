@@ -3624,7 +3624,6 @@ bobbies
 bobbin
 bobbing
 bobbins
-bobble
 bobbles
 bobby
 bobcat
@@ -3678,7 +3677,6 @@ bolder
 boldest
 boldly
 boldness
-bole
 bolero
 boleyn
 bolivia
@@ -8149,6 +8147,8 @@ debuggers
 debugging
 debugs
 debunk
+debunked
+debunking
 debunks
 debut
 debutant
@@ -10057,6 +10057,7 @@ dung
 dungeon
 dungeons
 dunghill
+dunk
 dunked
 dunking
 dunkirk
@@ -16942,6 +16943,7 @@ innards
 innate
 innately
 inner
+inning
 innings
 innkeeper
 innkeepers
@@ -18685,7 +18687,6 @@ lessens
 lesser
 lesson
 lessons
-lessor
 lessors
 lest
 lethal
@@ -19186,7 +19187,6 @@ lodgers
 lodges
 lodging
 lodgings
-loess
 loft
 lofted
 loftier
@@ -22433,7 +22433,6 @@ oscars
 oscilloscope
 oscilloscopes
 osiris
-oslo
 osmium
 osmosis
 osmotic
@@ -22444,8 +22443,6 @@ ostentation
 osteopath
 osteopaths
 osteoporosis
-ostler
-ostlers
 ostrich
 other
 otherness
@@ -23929,6 +23926,7 @@ pipes
 pipette
 pipettes
 pipework
+pipi
 piping
 pipings
 pipit
@@ -23953,6 +23951,7 @@ pirouette
 pisa
 piss
 pisses
+pissing
 pistol
 pistols
 piston
@@ -27739,7 +27738,6 @@ rotted
 rotten
 rottenly
 rottenness
-rotter
 rotting
 rotund
 rotunda
@@ -30574,7 +30572,6 @@ solemn
 solemnly
 solenoid
 solenoids
-soler
 soles
 solfa
 solicit
@@ -30703,7 +30700,6 @@ sortie
 sorties
 sorting
 sorts
-soso
 sotho
 soudan
 souffle
@@ -33338,6 +33334,8 @@ thaw
 thawed
 thawing
 thaws
+theater
+theaters
 theatre
 theatres
 thebes
@@ -37390,6 +37388,7 @@ zone
 zoned
 zones
 zoning
+zookeeper
 zookeepers
 zoological
 zoologist
