@@ -136,7 +136,7 @@ public class Wordgame implements CEApp {
     }
 
     public void showAlreadyUsedWords() {
-        channelMessenger.sendMessage("Words you found so far: ");
+        channelMessenger.sendMessage("You have found " + foundWords + " out of " + matchingWordCount + " words: ");
         String formattedWords = formatWords(alreadyUsedWords);
 
         channelMessenger.unpinMessage(wordMessageId);
@@ -166,7 +166,7 @@ public class Wordgame implements CEApp {
 
     private String getLettersFormattedString(List<Character> characters) {
         StringBuilder formattedLetters = new StringBuilder();
-        formattedLetters.append("**").append(requiredCharacter).append("** ");
+        formattedLetters.append("**").append(requiredCharacter).append("**");
         for (char c : characters) {
             if (c != requiredCharacter) {
                 formattedLetters.append(", ").append(c);
