@@ -1,9 +1,10 @@
 package org.incelexit.creamengine.games.words.listeners;
 
-import org.incelexit.creamengine.games.words.Wordgame;
-import org.incelexit.creamengine.listeners.GuildMessageReceivedListener;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.incelexit.creamengine.games.words.Wordgame;
+import org.incelexit.creamengine.listeners.GuildMessageReceivedListener;
 
 public class WordGameChannelListener extends GuildMessageReceivedListener {
 
@@ -19,15 +20,16 @@ public class WordGameChannelListener extends GuildMessageReceivedListener {
     @Override
     protected void handleGuildMessage(MessageReceivedEvent gmrEvent) {
         if (this.channel.getId().equals(gmrEvent.getChannel().getId())) {
-            String message = gmrEvent.getMessage().getContentDisplay();
-            switch (message) {
-                case "/words" -> game.showAlreadyUsedWords();
+            Message message = gmrEvent.getMessage();
+            String messageText = gmrEvent.getMessage().getContentDisplay();
+            switch (messageText) {
+                case "/words" -> game.printFoundWords();
                 case "/rules" -> game.printGameRules();
                 case "/letters" -> game.printLetters();
                 case "/score" -> game.printPoints();
                 case "/finish" -> game.finish();
                 default -> {
-                    if (message.matches("[a-zA-Z]*")) game.processNextWord(gmrEvent.getAuthor(), message);
+                    if (messageText.matches("[a-zA-Z]*")) game.processNextWord(gmrEvent.getAuthor(), message);
                 }
             }
         }

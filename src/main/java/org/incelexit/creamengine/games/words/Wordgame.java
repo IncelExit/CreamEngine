@@ -1,7 +1,9 @@
 package org.incelexit.creamengine.games.words;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.incelexit.creamengine.bot.CEBot;
 import org.incelexit.creamengine.games.words.callbacks.LetterMessageSetterCallback;
 import org.incelexit.creamengine.games.words.callbacks.WordMessageSetterCallback;
@@ -90,38 +92,49 @@ public class Wordgame implements CEApp {
         CEBot.getBot().registerListener(this.channelListener);
     }
 
-    public void processNextWord(User user, String nextWord) {
+    public void processNextWord(User user, Message message) {
+        String nextWord = message.getContentDisplay();
         nextWord = nextWord.toLowerCase(Locale.ROOT);
         if (nextWord.length() == 0) {
+            addCrossReaction(message);
             channelMessenger.sendMessage("Please enter a word.\n");
         } else if (nextWord.length() < 4) {
+            addCrossReaction(message);
             channelMessenger.sendMessage("Only words longer than 3 letters are allowed.\n");
         } else if (!nextWord.contains(String.valueOf(requiredCharacter))) {
+            addCrossReaction(message);
             channelMessenger.sendMessage("The word must contain the letter " + requiredCharacter + "\n");
         } else if (!characterRegex.matcher(nextWord).matches()) {
+            addCrossReaction(message);
             channelMessenger.sendMessage(nextWord + " contains letters that are not allowed.\n");
         } else if (!allWords.contains(nextWord)) {
-            channelMessenger.sendMessage("I don't know the word " + nextWord + ". If it's really a word, add it to the word list next time!\n");
+            addCrossReaction(message);
+            channelMessenger.sendMessage("I don't know the word " + nextWord + ".");
         } else if (alreadyUsedWords.contains(nextWord)) {
+            addCrossReaction(message);
             channelMessenger.sendMessage("You already said " + nextWord + ".\n");
         } else {
             foundWords++;
             alreadyUsedWords.add(nextWord);
+            addCheckmarkReaction(message);
 
             if (nextWord.equals(sevenLetterWord)) {
-                channelMessenger.sendMessage("SUPER NICE, you found the seven letter word!\n");
+                addStarReaction(message);
+                message.addReaction(Emoji.fromUnicode("U+2B50")).queue();
+//                channelMessenger.sendMessage("SUPER NICE, you found the seven letter word!\n");
             } else if (isDistinctSevenLetterWord(nextWord)) {
-                channelMessenger.sendMessage("""
-                        Huh, interesting, that's not the seven letter word I was thinking of.
-                        You are very smart!
-                        """);
+//                channelMessenger.sendMessage("""
+//                        Huh, interesting, that's not the seven letter word I was thinking of.
+//                        You are very smart!
+//                        """);
             }
 
             int pointValue = getPointValue(nextWord);
             addPoints(user, pointValue);
 
-            channelMessenger.sendMessage("Nice! The word " + nextWord + " counts! You get " + pointValue + " Points!\n" +
-                                         "Only " + (matchingWordCount - foundWords) + " to go!\n");
+            addPointReactions(message, pointValue);
+//            channelMessenger.sendMessage("Nice! The word " + nextWord + " counts! You get " + pointValue + " Points!\n" +
+//                                         "Only " + (matchingWordCount - foundWords) + " to go!\n");
 
 
         }
@@ -135,8 +148,8 @@ public class Wordgame implements CEApp {
         }
     }
 
-    public void showAlreadyUsedWords() {
-        channelMessenger.sendMessage("You have found " + foundWords + " out of " + matchingWordCount + " words: ");
+    public void printFoundWords() {
+        channelMessenger.sendMessage("You have found " + foundWords + " out of " + matchingWordCount + " words. ");
         String formattedWords = formatWords(alreadyUsedWords);
 
         channelMessenger.unpinMessage(wordMessageId);
@@ -151,9 +164,16 @@ public class Wordgame implements CEApp {
                 If you just want to see the allowed letters, enter /letters.
                 If you want to show all words you already found, enter /words.
                 And if you want to know how many points everyone has, enter /score.
+                
+                :white_check_mark: the word counts
+                :cross_mark: I don't know that word
+                :star: you found the 7 letter word
+                :one: the amount of points the word was worth
+                
                 """);
 
         printLetters();
+        printFoundWords();
 
         channelMessenger.sendMessage("Good luck finding all of them!");
     }
@@ -304,5 +324,24 @@ public class Wordgame implements CEApp {
 
     public void setWordMessageId(String wordMessageId) {
         this.wordMessageId = wordMessageId;
+    }
+
+    private void addPointReactions(Message message, int points) {
+        String pointString = Integer.toString(points);
+        for(char c : pointString.toCharArray()) {
+            message.addReaction(Emoji.fromUnicode("U+003" + c + "U+FE0F U+20E3")).queue();
+        }
+    }
+
+    private void addCheckmarkReaction(Message message) {
+        message.addReaction(Emoji.fromUnicode("U+2705")).queue();
+    }
+
+    private void addCrossReaction(Message message) {
+        message.addReaction(Emoji.fromUnicode("U+274C")).queue();
+    }
+
+    private void addStarReaction(Message message) {
+        message.addReaction(Emoji.fromUnicode("U+2B50")).queue();
     }
 }
